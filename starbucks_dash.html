@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Sales Dashboard</title>
+</head>
+<body>
+    <h1>Interactive Sales Dashboard</h1>
+    <p>Upload your JSON sales data file to generate the dashboard:</p>
+
+    <div id="dashboard"></div>
+
+    <script>
+        const API_URL = "http://localhost:3000/data"; // Backend endpoint
+
+        // Function to encode URLs using built-in urllib.parse.quote equivalent in JavaScript
+        function urlEncode(str) {
+            return encodeURIComponent(str);
+        }
+
+        // Function to fetch and update dashboard data
+        async function fetchData() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                updateDashboard(data);
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+                document.getElementById("dashboard").innerHTML = "<p>Error loading data</p>";
+            }
+        }
+
+        // Function to render dashboard data
+        function updateDashboard(data) {
+            const dashboard = document.getElementById("dashboard");
+            dashboard.innerHTML = ""; // Clear previous content
+
+            if (data.length === 0) {
+                dashboard.innerHTML = "<p>No sales data available</p>";
+                return;
+            }
+
+            const table = document.createElement("table");
+            table.border = "1";
+
+            const headerRow = document.createElement("tr");
+            headerRow.innerHTML = "<th>ID</th><th>Product</th><th>Sales</th>";
+            table.appendChild(headerRow);
+
+            data.forEach(item => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${item.id}</td><td>${item.product}</td><td>${item.sales}</td>`;
+                table.appendChild(row);
+            });
+
+            dashboard.appendChild(table);
+        }
+
+        // Periodically fetch data every 10 seconds
+        setInterval(fetchData, 10000);
+
+        // Initial load
+        fetchData();
+    </script>
+</body>
+</html>
