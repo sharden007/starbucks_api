@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import psycopg2
 from urllib.parse import quote as url_quote  # Use urllib.parse.quote instead of werkzeug.urls.url_quote
 
 app = Flask(__name__)
+CORS(app) 
 
 # Database connection function
 def get_db_connection():
@@ -10,8 +12,8 @@ def get_db_connection():
         conn = psycopg2.connect(
             database="dashboard_db",
             user="postgres",
-            password="password",
-            host="localhost",
+            password="Stealth6",
+            host="127.0.0.1",
             port="5432"
         )
         return conn

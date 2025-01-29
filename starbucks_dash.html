@@ -6,33 +6,29 @@
     <title>Interactive Sales Dashboard</title>
 </head>
 <body>
-    <h1>Interactive Sales Dashboard</h1>
-    <p>Upload your JSON sales data file to generate the dashboard:</p>
-
+    <h1>Sales Dashboard</h1>
     <div id="dashboard"></div>
 
     <script>
         const API_URL = "http://localhost:3000/data"; // Backend endpoint
 
-        // Function to encode URLs using built-in urllib.parse.quote equivalent in JavaScript
-        function urlEncode(str) {
-            return encodeURIComponent(str);
-        }
-
         // Function to fetch and update dashboard data
         async function fetchData() {
-            try {
-                const response = await fetch(API_URL);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                updateDashboard(data);
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
-                document.getElementById("dashboard").innerHTML = "<p>Error loading data</p>";
-            }
+    try {
+        const response = await fetch(API_URL);
+        console.log("Response status:", response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        const data = await response.json();
+        console.log("Fetched data:", data);
+        updateDashboard(data);
+    } catch (error) {
+        console.error("Failed to fetch data:", error);
+        document.getElementById("dashboard").innerHTML = `<p>Error loading data: ${error.message}</p>`;
+    }
+}
+
 
         // Function to render dashboard data
         function updateDashboard(data) {
